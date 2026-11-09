@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import './App.css';
 import {
   COMMERCIAL_CONFIG,
   buildCheckoutUrl,
@@ -16,10 +17,9 @@ import {
   Users,
   X,
   ZoomIn,
-  AlertTriangle,
   ArrowRight,
   DollarSign,
-  Briefcase,
+  Lock,
 } from 'lucide-react';
 
 interface PreviewModalData {
@@ -100,12 +100,10 @@ export function App() {
     }
   };
 
-  const handleCheckoutClick = (e: React.MouseEvent) => {
+  const handleCheckoutClick = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
     if (!commercialStatus.isReadyForSale) {
-      e.preventDefault();
-      alert(
-        'Modo de prévia local: Defina os campos PRECO_EBOOK e CHECKOUT_URL em src/config/commercial.ts para habilitar o redirecionamento ao checkout.'
-      );
+      alert('Modo de prévia local: Defina a CHECKOUT_URL em src/config/commercial.ts para habilitar a compra.');
       return;
     }
 
@@ -207,32 +205,32 @@ export function App() {
   // 6 Benefícios Práticos
   const benefits = [
     {
-      icon: <Layers size={24} />,
+      icon: <Layers size={26} />,
       title: 'Identificar tarefas delegáveis',
       desc: 'Mapeie o que consome sua energia diária e descubra o que pode ser transferido para a equipe sem perda de qualidade.',
     },
     {
-      icon: <Users size={24} />,
+      icon: <Users size={26} />,
       title: 'Definir responsáveis e prazos',
       desc: 'Estabeleça padrões claros de entrega para que cada colaborador saiba exatamente o que fazer, como fazer e quando entregar.',
     },
     {
-      icon: <TrendingUp size={24} />,
+      icon: <TrendingUp size={26} />,
       title: 'Clareza entre faturamento e lucro',
       desc: 'Aprenda a enxergar quanto sobra de verdade no caixa após descontar impostos, taxas, comissões, mídia e custos fixos.',
     },
     {
-      icon: <DollarSign size={24} />,
+      icon: <DollarSign size={26} />,
       title: 'Avaliar anúncios com precisão',
       desc: 'Compreenda por que ROAS alto não garante lucro e aprenda a calcular o retorno real considerando todos os custos operacionais.',
     },
     {
-      icon: <FileText size={24} />,
+      icon: <FileText size={26} />,
       title: 'Processos sem burocracia',
       desc: 'Crie documentações simples e utilizáveis pela equipe, evitando manuais longos que ninguém lê ou segue na rotina.',
     },
     {
-      icon: <Clock size={24} />,
+      icon: <Clock size={26} />,
       title: 'Prioridades em 90 dias',
       desc: 'Tenha um roteiro estruturado mês a mês para implementar as melhorias na ordem certa, sem sobrecarregar a empresa.',
     },
@@ -268,29 +266,18 @@ export function App() {
       q: 'Como recebo o material?',
       a: COMMERCIAL_CONFIG.ENTREGA_TEXTO && COMMERCIAL_CONFIG.ENTREGA_TEXTO.trim()
         ? COMMERCIAL_CONFIG.ENTREGA_TEXTO
-        : 'As instruções de entrega serão apresentadas na tela de confirmação do checkout externo.',
+        : 'O acesso para download do e-book é liberado imediatamente após a confirmação do pagamento no checkout seguro.',
     },
     {
       q: 'Como entro em contato?',
       a: COMMERCIAL_CONFIG.SUPORTE_URL && COMMERCIAL_CONFIG.SUPORTE_URL.trim()
-        ? `Você pode entrar em contato com o suporte através do canal oficial: ${COMMERCIAL_CONFIG.SUPORTE_URL}`
-        : 'O canal oficial de suporte será disponibilizado pelo vendedor na confirmação da compra.',
+        ? `Você pode entrar em contato com a equipe de suporte através do canal oficial: ${COMMERCIAL_CONFIG.SUPORTE_URL}`
+        : 'O canal oficial de suporte ao comprador é disponibilizado na tela de confirmação da compra.',
     },
   ];
 
   return (
     <div className="landing-page-root">
-      {/* Banner de Aviso de Configuração em Modo Prévia */}
-      {!commercialStatus.isReadyForSale && (
-        <div className="config-preview-banner" role="status">
-          <AlertTriangle size={15} />
-          <span>
-            <strong>Modo de Prévia:</strong> Para ativar a venda real, preencha os campos{' '}
-            <code>PRECO_EBOOK</code> e <code>CHECKOUT_URL</code> em <code>src/config/commercial.ts</code>.
-          </span>
-        </div>
-      )}
-
       {/* 1. CABEÇALHO */}
       <header className="site-header">
         <div className="container nav-container">
@@ -299,7 +286,7 @@ export function App() {
               src="/Logo.png"
               alt="Liberdade Empresarial"
               className="brand-logo-img"
-              width={140}
+              width={160}
               height={40}
               loading="eager"
             />
@@ -383,7 +370,7 @@ export function App() {
               <div className="hero-cta-group">
                 <button onClick={scrollToOffer} className="btn-primary" style={{ width: '100%' }}>
                   <span>Quero organizar meu negócio</span>
-                  <ArrowRight size={18} />
+                  <ArrowRight size={20} />
                 </button>
 
                 <p className="hero-support-text">
@@ -411,7 +398,7 @@ export function App() {
                   />
                 </div>
                 <div className="mockup-badge">
-                  <FileText size={15} />
+                  <FileText size={16} />
                   <span>E-book Digital • PDF 15 páginas</span>
                 </div>
               </div>
@@ -420,57 +407,48 @@ export function App() {
         </div>
       </section>
 
-      {/* 3. IDENTIFICAÇÃO COM O PROBLEMA */}
+      {/* 3. IDENTIFICAÇÃO COM O PROBLEMA (COMPOSIÇÃO EDITORIAL) */}
       <section className="section-py section-light" aria-labelledby="problem-heading">
         <div className="container">
-          <div className="problem-header">
-            <h2 id="problem-heading">Quando tudo passa por você, crescer fica mais difícil.</h2>
-            <p className="problem-intro">
-              Você começou um negócio para ter mais autonomia. Mas, na prática, sua rotina pode
-              estar tomada por tarefas, dúvidas da equipe e decisões que nunca terminam.
+          <div className="problem-layout">
+            <div className="problem-side-statement">
+              <span className="tag-badge tag-badge-gold">DIAGNÓSTICO DA OPERAÇÃO</span>
+              <h2 id="problem-heading">Quando tudo passa por você, crescer fica mais difícil.</h2>
+              <p>
+                Você começou um negócio para ter mais autonomia. Mas, na prática, sua rotina pode
+                estar tomada por tarefas, dúvidas da equipe e decisões que nunca terminam.
+              </p>
+            </div>
+
+            <div className="problem-list">
+              <div className="problem-item">
+                <span className="problem-item-num">01</span>
+                <span className="problem-item-text">A equipe espera sua aprovação para quase tudo.</span>
+              </div>
+              <div className="problem-item">
+                <span className="problem-item-num">02</span>
+                <span className="problem-item-text">Você atende, vende, resolve problemas e ainda cuida do financeiro.</span>
+              </div>
+              <div className="problem-item">
+                <span className="problem-item-num">03</span>
+                <span className="problem-item-text">Tirar alguns dias de folga exige uma operação inteira.</span>
+              </div>
+              <div className="problem-item">
+                <span className="problem-item-num">04</span>
+                <span className="problem-item-text">O faturamento aparece, mas o lucro continua pouco claro.</span>
+              </div>
+              <div className="problem-item">
+                <span className="problem-item-num">05</span>
+                <span className="problem-item-text">As informações importantes estão na sua cabeça.</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="problem-conclusion-editorial">
+            <p>
+              O caminho começa com responsabilidades claras, processos utilizáveis e números
+              confiáveis.
             </p>
-          </div>
-
-          <div className="problem-grid">
-            <div className="problem-card">
-              <div className="problem-icon-wrapper">
-                <Users size={22} />
-              </div>
-              <p>A equipe espera sua aprovação para quase tudo.</p>
-            </div>
-
-            <div className="problem-card">
-              <div className="problem-icon-wrapper">
-                <Briefcase size={22} />
-              </div>
-              <p>Você atende, vende, resolve problemas e ainda cuida do financeiro.</p>
-            </div>
-
-            <div className="problem-card">
-              <div className="problem-icon-wrapper">
-                <Clock size={22} />
-              </div>
-              <p>Tirar alguns dias de folga exige uma operação inteira.</p>
-            </div>
-
-            <div className="problem-card">
-              <div className="problem-icon-wrapper">
-                <TrendingUp size={22} />
-              </div>
-              <p>O faturamento aparece, mas o lucro continua pouco claro.</p>
-            </div>
-
-            <div className="problem-card">
-              <div className="problem-icon-wrapper">
-                <FileText size={22} />
-              </div>
-              <p>As informações importantes estão na sua cabeça.</p>
-            </div>
-          </div>
-
-          <div className="problem-conclusion">
-            O caminho começa com responsabilidades claras, processos utilizáveis e números
-            confiáveis.
           </div>
         </div>
       </section>
@@ -479,20 +457,18 @@ export function App() {
       <section className="section-py section-warm" aria-labelledby="benefits-heading">
         <div className="container">
           <div className="section-header">
-            <span className="tag-badge tag-badge-gold" style={{ marginBottom: '12px' }}>
-              FOCO EM EXECUÇÃO
-            </span>
+            <span className="tag-badge tag-badge-gold">FOCO EM EXECUÇÃO</span>
             <h2 id="benefits-heading">Mais clareza para gerir. Mais estrutura para delegar.</h2>
             <p>
-              Benefícios práticos desenhados para tirar você do sufoco do dia a dia e devolver o
-              controle estratégico da sua empresa.
+              Benefícios práticos desenvolvidos para organizar sua operação e permitir que você assuma
+              a liderança estratégica da empresa.
             </p>
           </div>
 
           <div className="benefits-grid">
             {benefits.map((b, idx) => (
               <div key={idx} className="benefit-card">
-                <div className="benefit-icon">{b.icon}</div>
+                <div className="benefit-icon-box">{b.icon}</div>
                 <h3>{b.title}</h3>
                 <p>{b.desc}</p>
               </div>
@@ -505,55 +481,41 @@ export function App() {
       <section id="conteudo" className="section-py section-dark" aria-labelledby="modules-heading">
         <div className="container">
           <div className="section-header">
-            <span className="tag-badge tag-badge-gold" style={{ marginBottom: '12px' }}>
-              GRADE DO E-BOOK
-            </span>
-            <h2 id="modules-heading" style={{ color: 'var(--color-warm-white)' }}>
+            <span className="tag-badge tag-badge-gold">ESTRUTURA DO MANUAL</span>
+            <h2 id="modules-heading" style={{ color: 'var(--color-text-light)' }}>
               Um caminho prático da operação à gestão.
             </h2>
             <p style={{ color: 'var(--color-text-secondary-light)' }}>
-              Conheça os 10 módulos organizados em sequência lógica para estruturar o seu negócio.
+              Conheça os 10 módulos organizados em sequência lógica para transformar a rotina do seu negócio.
             </p>
           </div>
 
-          <div className="modules-list" role="region" aria-label="Módulos do livro">
+          <div className="modules-accordion-wrap" role="region" aria-label="Módulos do livro">
             {modules.map((mod, index) => {
               const isActive = activeModuleIndex === index;
               return (
-                <div
-                  key={mod.num}
-                  className={`module-item ${isActive ? 'active' : ''}`}
-                >
+                <div key={mod.num} className={`module-card ${isActive ? 'active' : ''}`}>
                   <button
-                    className="module-trigger"
+                    className="module-header-btn"
                     onClick={() => setActiveModuleIndex(isActive ? null : index)}
                     aria-expanded={isActive}
                     aria-controls={`module-content-${mod.num}`}
                     id={`module-header-${mod.num}`}
                   >
-                    <div className="module-trigger-left">
-                      <span className="module-num">{mod.num}</span>
-                      <div>
-                        <div className="module-title">{mod.title}</div>
-                        <div
-                          style={{
-                            fontSize: '0.85rem',
-                            color: 'var(--color-text-muted-light)',
-                            fontWeight: 400,
-                            marginTop: '2px',
-                          }}
-                        >
-                          {mod.desc}
-                        </div>
+                    <div className="module-header-left">
+                      <span className="module-index">{mod.num}</span>
+                      <div className="module-title-wrap">
+                        <h3>{mod.title}</h3>
+                        <span>{mod.desc}</span>
                       </div>
                     </div>
-                    <ChevronDown size={20} className="module-icon-chevron" />
+                    <ChevronDown size={22} className="module-chevron" />
                   </button>
 
                   {isActive && (
                     <div
                       id={`module-content-${mod.num}`}
-                      className="module-content"
+                      className="module-body"
                       role="region"
                       aria-labelledby={`module-header-${mod.num}`}
                     >
@@ -561,8 +523,8 @@ export function App() {
                       {mod.isIntroductory && (
                         <p
                           style={{
-                            marginTop: '8px',
-                            fontSize: '0.84rem',
+                            marginTop: '10px',
+                            fontSize: '0.86rem',
                             fontStyle: 'italic',
                             color: 'var(--color-gold)',
                           }}
@@ -578,8 +540,8 @@ export function App() {
             })}
           </div>
 
-          <div className="modules-note">
-            <ShieldCheck size={20} style={{ flexShrink: 0, color: 'var(--color-gold)' }} />
+          <div className="modules-disclaimer-box">
+            <ShieldCheck size={22} style={{ flexShrink: 0, color: 'var(--color-gold)' }} />
             <span>
               Os módulos 09 (Expansão) e 10 (Governança) são introdutórios e apresentam conceitos
               fundamentais de evolução sustentável para pequenas empresas.
@@ -592,9 +554,7 @@ export function App() {
       <section className="section-py section-light" aria-labelledby="preview-heading">
         <div className="container">
           <div className="section-header">
-            <span className="tag-badge tag-badge-gold" style={{ marginBottom: '12px' }}>
-              PRÉVIA DAS PÁGINAS
-            </span>
+            <span className="tag-badge tag-badge-gold">PRÉVIA REAL DO CONTEÚDO</span>
             <h2 id="preview-heading">Conteúdo direto para colocar em prática.</h2>
             <p>
               Veja páginas reais extraídas diretamente do e-book. Clique em qualquer página para
@@ -602,11 +562,11 @@ export function App() {
             </p>
           </div>
 
-          <div className="preview-grid">
+          <div className="preview-cards-grid">
             {/* Página de Módulo (Pág 3) */}
-            <div className="preview-card">
+            <div className="preview-plate">
               <div
-                className="preview-thumb-container"
+                className="preview-viewport"
                 onClick={() =>
                   openPreview(
                     'Módulo 01: Fundamentos de um negócio escalável',
@@ -634,22 +594,22 @@ export function App() {
                   width={595}
                   height={842}
                 />
-                <div className="preview-overlay-btn">
-                  <ZoomIn size={24} />
+                <div className="preview-hover-action">
+                  <ZoomIn size={26} />
                   <span>Clique para ampliar</span>
                 </div>
               </div>
-              <div className="preview-card-info">
-                <span className="preview-card-tag">Página de Módulo</span>
+              <div className="preview-caption-area">
+                <span className="preview-type-tag">Página de Módulo</span>
                 <h3>Módulo 01: Negócio Escalável</h3>
                 <p>Estruture o sistema para que outras pessoas executem com padrão e qualidade.</p>
               </div>
             </div>
 
             {/* Exemplo Financeiro (Pág 7) */}
-            <div className="preview-card">
+            <div className="preview-plate">
               <div
-                className="preview-thumb-container"
+                className="preview-viewport"
                 onClick={() =>
                   openPreview(
                     'Módulo 05: Exemplo Financeiro Comentado',
@@ -677,13 +637,13 @@ export function App() {
                   width={595}
                   height={842}
                 />
-                <div className="preview-overlay-btn">
-                  <ZoomIn size={24} />
+                <div className="preview-hover-action">
+                  <ZoomIn size={26} />
                   <span>Clique para ampliar</span>
                 </div>
               </div>
-              <div className="preview-card-info">
-                <span className="preview-card-tag">Exemplo Financeiro</span>
+              <div className="preview-caption-area">
+                <span className="preview-type-tag">Exemplo Financeiro</span>
                 <h3>Venda de R$ 1.000 Comentada</h3>
                 <p>
                   Por que R$ 200 em anúncios não geram R$ 800 de lucro. Cálculo completo da margem.
@@ -692,9 +652,9 @@ export function App() {
             </div>
 
             {/* Plano de 90 Dias (Pág 13) */}
-            <div className="preview-card">
+            <div className="preview-plate">
               <div
-                className="preview-thumb-container"
+                className="preview-viewport"
                 onClick={() =>
                   openPreview(
                     'Da Leitura à Execução: Plano de 90 Dias',
@@ -722,20 +682,20 @@ export function App() {
                   width={595}
                   height={842}
                 />
-                <div className="preview-overlay-btn">
-                  <ZoomIn size={24} />
+                <div className="preview-hover-action">
+                  <ZoomIn size={26} />
                   <span>Clique para ampliar</span>
                 </div>
               </div>
-              <div className="preview-card-info">
-                <span className="preview-card-tag">Plano de Ação</span>
+              <div className="preview-caption-area">
+                <span className="preview-type-tag">Plano de Ação</span>
                 <h3>Roteiro de Execução de 90 Dias</h3>
                 <p>Sequência de 3 etapas com modelo de compromisso semanal e prioridades.</p>
               </div>
             </div>
           </div>
 
-          <div className="preview-highlight">
+          <div className="preview-highlight-bar">
             15 páginas de leitura objetiva, com exercícios para transformar conceitos em próximos
             passos.
           </div>
@@ -746,44 +706,42 @@ export function App() {
       <section id="para-quem" className="section-py section-warm" aria-labelledby="audience-heading">
         <div className="container">
           <div className="section-header">
-            <span className="tag-badge tag-badge-gold" style={{ marginBottom: '12px' }}>
-              PERFIL INDICADO
-            </span>
+            <span className="tag-badge tag-badge-gold">PERFIL INDICADO</span>
             <h2 id="audience-heading">Este manual faz sentido para você?</h2>
-            <p>Desenvolvido sob medida para líderes e fundadores que vivem o desafio da gestão real.</p>
+            <p>Desenvolvido sob medida para líderes e fundadores que buscam organização e controle real.</p>
           </div>
 
-          <div className="audience-grid">
-            <div className="audience-card">
-              <div className="audience-check">
-                <CheckCircle2 size={18} />
+          <div className="audience-editorial-layout">
+            <div className="audience-editorial-card">
+              <div className="audience-icon-check">
+                <CheckCircle2 size={20} />
               </div>
               <p>Quem concentra tarefas e decisões no próprio negócio.</p>
             </div>
 
-            <div className="audience-card">
-              <div className="audience-check">
-                <CheckCircle2 size={18} />
+            <div className="audience-editorial-card">
+              <div className="audience-icon-check">
+                <CheckCircle2 size={20} />
               </div>
               <p>Quem está começando a estruturar uma equipe.</p>
             </div>
 
-            <div className="audience-card">
-              <div className="audience-check">
-                <CheckCircle2 size={18} />
+            <div className="audience-editorial-card">
+              <div className="audience-icon-check">
+                <CheckCircle2 size={20} />
               </div>
               <p>Quem precisa organizar processos e finanças.</p>
             </div>
 
-            <div className="audience-card">
-              <div className="audience-check">
-                <CheckCircle2 size={18} />
+            <div className="audience-editorial-card">
+              <div className="audience-icon-check">
+                <CheckCircle2 size={20} />
               </div>
               <p>Quem busca uma introdução prática à gestão empresarial.</p>
             </div>
           </div>
 
-          <div className="audience-disclaimer">
+          <div className="audience-note-box">
             <strong>Observação importante:</strong> O material é introdutório. Não substitui
             consultoria individual nem formação especializada em contabilidade, direito ou gestão.
           </div>
@@ -794,41 +752,36 @@ export function App() {
       <section className="section-py section-dark" aria-labelledby="plan-heading">
         <div className="container">
           <div className="section-header">
-            <span className="tag-badge tag-badge-gold" style={{ marginBottom: '12px' }}>
-              ROTEIRO DE EXECUÇÃO
-            </span>
-            <h2 id="plan-heading" style={{ color: 'var(--color-warm-white)' }}>
+            <span className="tag-badge tag-badge-gold">ROTEIRO DE EXECUÇÃO</span>
+            <h2 id="plan-heading" style={{ color: 'var(--color-text-light)' }}>
               Saia da leitura com uma sequência de execução.
             </h2>
             <p style={{ color: 'var(--color-text-secondary-light)' }}>
-              Três fases ordenadas para guiar a organização da sua empresa sem paralisações.
+              Três etapas encadeadas para guiar a organização da sua empresa com segurança e ritmo sustentável.
             </p>
           </div>
 
-          <div className="plan-timeline">
-            {/* Etapa 1 */}
-            <div className="plan-card">
-              <span className="plan-phase-badge">Dias 1 a 30</span>
+          <div className="timeline-track-grid">
+            <div className="timeline-step-card">
+              <span className="timeline-step-phase">Etapa 01 • Dias 1 a 30</span>
               <h3>Entender e organizar</h3>
               <p>Revisar oferta, custos, caixa e gargalos.</p>
             </div>
 
-            {/* Etapa 2 */}
-            <div className="plan-card">
-              <span className="plan-phase-badge">Dias 31 a 60</span>
+            <div className="timeline-step-card">
+              <span className="timeline-step-phase">Etapa 02 • Dias 31 a 60</span>
               <h3>Padronizar e delegar</h3>
               <p>Documentar processos, treinar responsáveis e definir limites de decisão.</p>
             </div>
 
-            {/* Etapa 3 */}
-            <div className="plan-card">
-              <span className="plan-phase-badge">Dias 61 a 90</span>
+            <div className="timeline-step-card">
+              <span className="timeline-step-phase">Etapa 03 • Dias 61 a 90</span>
               <h3>Testar e melhorar</h3>
               <p>Avaliar aquisição, qualidade, resultados e autonomia operacional.</p>
             </div>
           </div>
 
-          <div className="plan-observation">
+          <div className="timeline-note">
             O roteiro pode ser adaptado ao momento e à capacidade da sua empresa.
           </div>
         </div>
@@ -842,63 +795,58 @@ export function App() {
         aria-labelledby="offer-heading"
       >
         <div className="container">
-          <div className="offer-box">
-            <div className="offer-header">
-              <span className="tag-badge tag-badge-gold" style={{ marginBottom: '12px' }}>
-                ACESSO IMEDIATO AO CONTEÚDO
-              </span>
+          <div className="offer-box-editorial">
+            <div className="offer-header-center">
+              <span className="tag-badge tag-badge-gold">ACESSO IMEDIATO AO MANUAL</span>
               <h2 id="offer-heading">Dê o próximo passo para organizar seu negócio.</h2>
               <p>
                 <strong>Do Operacional à Liberdade Empresarial</strong>
                 <br />
-                <span style={{ fontSize: '0.95rem', color: 'var(--color-text-secondary)' }}>
+                <span style={{ fontSize: '0.98rem', color: 'var(--color-text-secondary)' }}>
                   Como estruturar processos, desenvolver pessoas e crescer com controle financeiro.
                 </span>
               </p>
             </div>
 
-            {/* Lista dos 6 componentes inclusos */}
-            <div className="offer-grid-features">
-              <div className="offer-feature-item">
-                <span className="offer-feature-bullet"></span>
+            {/* Componentes inclusos no mesmo PDF */}
+            <div className="offer-included-list">
+              <div className="offer-item-row">
+                <span className="offer-bullet-gold"></span>
                 <span>E-book digital em PDF com 15 páginas</span>
               </div>
-              <div className="offer-feature-item">
-                <span className="offer-feature-bullet"></span>
+              <div className="offer-item-row">
+                <span className="offer-bullet-gold"></span>
                 <span>Os 10 módulos do manual</span>
               </div>
-              <div className="offer-feature-item">
-                <span className="offer-feature-bullet"></span>
+              <div className="offer-item-row">
+                <span className="offer-bullet-gold"></span>
                 <span>Exercícios ao longo da leitura</span>
               </div>
-              <div className="offer-feature-item">
-                <span className="offer-feature-bullet"></span>
+              <div className="offer-item-row">
+                <span className="offer-bullet-gold"></span>
                 <span>Exemplo financeiro comentado</span>
               </div>
-              <div className="offer-feature-item">
-                <span className="offer-feature-bullet"></span>
+              <div className="offer-item-row">
+                <span className="offer-bullet-gold"></span>
                 <span>Plano de ação de 90 dias</span>
               </div>
-              <div className="offer-feature-item">
-                <span className="offer-feature-bullet"></span>
+              <div className="offer-item-row">
+                <span className="offer-bullet-gold"></span>
                 <span>Painel essencial de gestão</span>
               </div>
             </div>
 
             {/* Bloco de Preço */}
-            <div className="offer-price-area">
-              <div className="offer-price-label">Valor do investimento</div>
+            <div className="offer-pricing-block">
+              <div className="offer-pricing-label">Valor do investimento</div>
               {COMMERCIAL_CONFIG.PRECO_EBOOK && COMMERCIAL_CONFIG.PRECO_EBOOK.trim() ? (
-                <div className="offer-price-value">{COMMERCIAL_CONFIG.PRECO_EBOOK}</div>
+                <div className="offer-pricing-value">{COMMERCIAL_CONFIG.PRECO_EBOOK}</div>
               ) : (
                 <div>
-                  <div
-                    className="offer-price-value"
-                    style={{ fontSize: '1.85rem', color: 'var(--color-primary-blue)' }}
-                  >
+                  <div className="offer-pricing-value" style={{ fontSize: '2rem' }}>
                     Condições no Checkout Oficial
                   </div>
-                  <p style={{ marginTop: '8px', fontSize: '0.92rem', color: 'var(--color-text-secondary)' }}>
+                  <p style={{ marginTop: '8px', fontSize: '0.94rem', color: 'var(--color-text-secondary)' }}>
                     Consulte o valor atualizado e formas de pagamento diretamente no checkout seguro.
                   </p>
                 </div>
@@ -906,22 +854,33 @@ export function App() {
             </div>
 
             {/* CTA de Compra */}
-            <div className="offer-cta-container">
+            <div className="offer-cta-wrap">
               <button
                 onClick={handleCheckoutClick}
-                className="btn-primary offer-btn"
+                className="btn-primary offer-btn-large"
                 disabled={!commercialStatus.isReadyForSale}
-                aria-label="Comprar e-book Do Operacional à Liberdade Empresarial no checkout seguro"
+                aria-label="Comprar e-book Do Operacional à Liberdade Empresarial no checkout oficial"
               >
                 <span>Comprar meu e-book</span>
-                <ArrowRight size={20} />
+                <ArrowRight size={22} />
               </button>
 
-              <div className="offer-security-info">
+              <div className="offer-security-seal">
                 <strong>Produto digital. Nenhum material físico será enviado.</strong>
-                <span style={{ display: 'block', marginTop: '4px', color: 'var(--color-text-muted)' }}>
-                  Ambiente de pagamento seguro e criptografado
-                </span>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    marginTop: '6px',
+                    color: 'var(--color-text-muted)',
+                    fontSize: '0.84rem',
+                  }}
+                >
+                  <Lock size={14} />
+                  <span>Ambiente de pagamento seguro e criptografado</span>
+                </div>
               </div>
             </div>
           </div>
@@ -932,33 +891,31 @@ export function App() {
       <section id="duvidas" className="section-py section-warm" aria-labelledby="faq-heading">
         <div className="container">
           <div className="section-header">
-            <span className="tag-badge tag-badge-gold" style={{ marginBottom: '12px' }}>
-              ESCLARECIMENTOS
-            </span>
+            <span className="tag-badge tag-badge-gold">ESCLARECIMENTOS</span>
             <h2 id="faq-heading">Perguntas frequentes</h2>
             <p>Respostas diretas e transparentes sobre o formato, conteúdo e entrega do material.</p>
           </div>
 
-          <div className="faq-list" role="region" aria-label="Perguntas frequentes">
+          <div className="faq-accordion-list" role="region" aria-label="Perguntas frequentes">
             {faqItems.map((item, idx) => {
               const isOpen = activeFaqIndex === idx;
               return (
-                <div key={idx} className={`faq-item ${isOpen ? 'active' : ''}`}>
+                <div key={idx} className={`faq-row ${isOpen ? 'active' : ''}`}>
                   <button
-                    className="faq-trigger"
+                    className="faq-question-btn"
                     onClick={() => setActiveFaqIndex(isOpen ? null : idx)}
                     aria-expanded={isOpen}
                     aria-controls={`faq-answer-${idx}`}
                     id={`faq-btn-${idx}`}
                   >
                     <span>{item.q}</span>
-                    <ChevronDown size={20} className="faq-chevron" />
+                    <ChevronDown size={22} className="faq-icon-chevron" />
                   </button>
 
                   {isOpen && (
                     <div
                       id={`faq-answer-${idx}`}
-                      className="faq-answer"
+                      className="faq-body-text"
                       role="region"
                       aria-labelledby={`faq-btn-${idx}`}
                     >
@@ -975,7 +932,7 @@ export function App() {
       {/* 11. CHAMADA FINAL */}
       <section className="final-cta-section" aria-labelledby="final-cta-heading">
         <div className="container">
-          <div className="final-cta-content">
+          <div className="final-cta-box">
             <span className="tag-badge tag-badge-gold">DECISÃO ESTRATÉGICA</span>
             <h2 id="final-cta-heading">Comece pela próxima decisão que sua empresa precisa.</h2>
             <p>
@@ -985,11 +942,11 @@ export function App() {
             <button
               onClick={handleCheckoutClick}
               className="btn-primary"
-              style={{ padding: '18px 40px', fontSize: '1.15rem' }}
+              style={{ padding: '20px 44px', fontSize: '1.18rem' }}
               aria-label="Ir para o checkout seguro e comprar o e-book"
             >
               <span>Quero o meu e-book</span>
-              <ArrowRight size={20} />
+              <ArrowRight size={22} />
             </button>
           </div>
         </div>
@@ -998,19 +955,19 @@ export function App() {
       {/* 12. RODAPÉ */}
       <footer ref={footerRef} className="site-footer">
         <div className="container">
-          <div className="footer-grid">
+          <div className="footer-grid-cols">
             <div className="footer-brand">
               <div className="footer-logo-card">
                 <img
                   src="/Logo.png"
                   alt="Liberdade Empresarial"
                   className="footer-logo-img"
-                  width={140}
-                  height={40}
+                  width={150}
+                  height={36}
                   loading="lazy"
                 />
               </div>
-              <p>
+              <p className="footer-about-p">
                 Como estruturar processos, desenvolver pessoas e crescer com controle financeiro.
                 Manual prático e direto para empresários.
               </p>
@@ -1076,16 +1033,16 @@ export function App() {
             </div>
           </div>
 
-          <div className="footer-bottom">
+          <div className="footer-bottom-line">
             <p>
               © {new Date().getFullYear()} Liberdade Empresarial. Todos os direitos reservados.
-              Produto digital disponibilizado em PDF.
+              Produto digital disponibilizado em formato PDF.
             </p>
           </div>
         </div>
       </footer>
 
-      {/* CTA Fixo Mobile (visível após a primeira dobra, oculto na oferta e rodapé) */}
+      {/* CTA Fixo Mobile */}
       {showStickyBar && (
         <div className="sticky-mobile-bar" role="complementary" aria-label="Ação rápida de compra">
           <div className="sticky-mobile-info">
@@ -1120,7 +1077,7 @@ export function App() {
                 onClick={closeModal}
                 aria-label="Fechar visualização"
               >
-                <X size={20} />
+                <X size={22} />
               </button>
             </div>
             <div className="modal-body">
@@ -1129,9 +1086,9 @@ export function App() {
             {modalData.description && (
               <div
                 style={{
-                  padding: '12px 20px',
+                  padding: '14px 24px',
                   backgroundColor: 'var(--color-warm-white)',
-                  fontSize: '0.85rem',
+                  fontSize: '0.9rem',
                   color: 'var(--color-text-secondary)',
                   borderTop: '1px solid var(--color-border-light)',
                   textAlign: 'center',
